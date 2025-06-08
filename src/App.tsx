@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Button } from './components/ui/button';
 import Landing from './app/public/landing';
 import AuthLayout from './app/public/auth/_layout';
 import Signup from './app/public/auth/sign-up';
