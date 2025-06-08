@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MoonLoader } from 'react-spinners';
 import { z } from 'zod';
 
@@ -39,7 +39,7 @@ export default function Signin() {
     resolver: zodResolver(schema),
     defaultValues: {
       email: 'samieoseh@gmail.com',
-      password: '12345678',
+      password: '123456789',
     },
   });
 
@@ -68,8 +68,8 @@ export default function Signin() {
             Enter your email below to login to your account
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form>
+        <form className="flex flex-col gap-8">
+          <CardContent>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -96,9 +96,12 @@ export default function Signin() {
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a className="text-xs ml-auto inline-block underline-offset-4 hover:underline">
+                  <Link
+                    className="text-xs ml-auto cursor-pointer inline-block underline-offset-4 hover:underline"
+                    to={'/auth/forgot-password'}
+                  >
                     Forgot your password?
-                  </a>
+                  </Link>
                 </div>
                 <Controller
                   name="password"
@@ -114,27 +117,29 @@ export default function Signin() {
                 )}
               </div>
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button
-            type="submit"
-            className="w-full"
-            onClick={handleSubmit(onSubmit)}
-          >
-            <MoonLoader
-              color={'#ffffff'}
-              loading={isSigningIn}
-              size={15}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-            {isSigningIn ? 'Please wait' : 'Sign in'}
-          </Button>
-          {/* <Button variant="outline" className="w-full">
+          </CardContent>
+          <CardFooter className="flex-col gap-2">
+            <Button
+              type="submit"
+              role="submit"
+              className="w-full"
+              disabled={isSigningIn}
+              onClick={handleSubmit(onSubmit)}
+            >
+              <MoonLoader
+                color={'#ffffff'}
+                loading={isSigningIn}
+                size={15}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+              {isSigningIn ? 'Please wait' : 'Sign in'}
+            </Button>
+            {/* <Button variant="outline" className="w-full">
             Sign in with Google
           </Button> */}
-        </CardFooter>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   );

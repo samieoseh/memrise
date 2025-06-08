@@ -6,7 +6,9 @@ export default function AuthLayout() {
   return (
     <div>
       <Header isAuthenticated={false} />
-      <Outlet />
+      <div className="max-w-7xl mx-auto">
+        <Outlet />
+      </div>
       <Footer isAuthenticated={false} />
     </div>
   );
