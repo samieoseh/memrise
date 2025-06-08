@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Landing from './app/public/landing';
+import AuthLayout from './app/public/auth/_layout';
+import Signup from './app/public/auth/sign-up';
+import Signin from './app/public/auth/sign-in';
+import ForgotPassword from './app/public/auth/forgot-password';
+import ResetPassword from './app/public/auth/reset-password';
+import { Toaster } from 'react-hot-toast';
+import MainLayout from './app/(app)/_layout';
+import Dashboard from './app/(app)/dashboard';
 
-function App() {
-  const [count, setCount] = useState(0)
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Landing />,
+    errorElement: <div>404</div>,
+  },
+  {
+    path: '/auth',
+    element: <AuthLayout />,
+    children: [
+      {
+        path: 'sign-up',
+        element: <Signup />,
+      },
+      {
+        path: 'sign-in',
+        element: <Signin />,
+      },
+      {
+        path: 'forgot-password',
+        element: <ForgotPassword />,
+      },
+      {
+        path: 'reset-password',
+        element: <ResetPassword />,
+      },
+    ],
+  },
 
+  {
+    path: '/dashboard',
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+    ],
+  },
+]);
+
+export default function App() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <RouterProvider router={router} />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#1f2937',
+            color: '#fff',
+          },
+        }}
+      />
     </>
-  )
+  );
 }
-
-export default App
