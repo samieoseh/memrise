@@ -1,5 +1,5 @@
 import { Book, Settings, Trophy } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 
 export default function Header({
@@ -12,16 +12,18 @@ export default function Header({
     <header className={'bg-gray-900 border-b transition-colors duration-200'}>
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-3">
-            <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-2 rounded-lg">
-              <Book className="h-6 w-6 text-white" />
+          <Link to={'/'}>
+            <div className="flex items-center space-x-3">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-2 rounded-lg">
+                <Book className="h-6 w-6 text-white" />
+              </div>
+              <h1 className={`text-xl font-bold  text-white`}>VerseVibe</h1>
             </div>
-            <h1 className={`text-xl font-bold  text-white`}>VerseVibe</h1>
-          </div>
+          </Link>
 
-          <div className="flex items-center space-x-4">
+          <div>
             {isAuthenticated ? (
-              <div>
+              <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-4 text-sm">
                   <div
                     className={`flex items-center space-x-1 
@@ -29,26 +31,27 @@ export default function Header({
                 `}
                   >
                     <Trophy className="h-4 w-4 text-yellow-500" />
-                    {/* <span>Level {userStats.level}</span> */}
+
+                    <span>Level 5</span>
                   </div>
                   <div
                     className={`flex items-center space-x-1 text-gray-300
                 `}
                   >
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    {/* <span>{userStats.points} pts</span> */}
+                    <span>200 pts</span>
                   </div>
                   <div
                     className={`flex items-center space-x-1 text-gray-300 
                 `}
                   >
                     <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                    {/* <span>{userStats.streak} day streak</span> */}
+                    <span>7 day streak</span>
                   </div>
                 </div>
 
                 <button
-                  className={`p-2 rounded-lg transition-colors 
+                  className={`p-2 rounded-full transition-colors 
                 bg-gray-800 text-gray-400 hover:bg-gray-700
               `}
                 >
