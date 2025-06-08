@@ -1,5 +1,9 @@
 import supabase from '@/lib/supabase';
-import type { SigninPayload, SignupPayload } from '@/typings/auth';
+import type {
+  ForgotPasswordPayload,
+  SigninPayload,
+  SignupPayload,
+} from '@/typings/auth';
 
 export const signup = async (payload: SignupPayload) => {
   const updatedPayload = {
@@ -28,4 +32,23 @@ export const signin = async (payload: SigninPayload) => {
   }
 
   return data;
+};
+
+export const forgotPassword = async (payload: ForgotPasswordPayload) => {
+  const { error } = await supabase.auth.resetPasswordForEmail(payload.email, {
+    redirectTo: 'http://localhost:5173/auth/reset-password',
+  });
+
+  if (error) {
+    throw new Error(error.message ?? 'Sign in failed');
+  }
+};
+
+export const resetPassword = async (payload: { password: string }) => {
+  const { error } = await supabase.auth.updateUser({
+    password: payload.password,
+  });
+  if (error) {
+    throw new Error(error.message ?? 'Sign in failed');
+  }
 };

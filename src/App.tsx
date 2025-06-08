@@ -8,6 +8,7 @@ import ResetPassword from './app/public/auth/reset-password';
 import { Toaster } from 'react-hot-toast';
 import MainLayout from './app/(app)/_layout';
 import Dashboard from './app/(app)/dashboard';
+import EmailSent from './app/public/auth/email-sent';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: 'forgot-password',
         element: <ForgotPassword />,
+      },
+      {
+        path: 'email-sent',
+        element: <EmailSent />,
       },
       {
         path: 'reset-password',

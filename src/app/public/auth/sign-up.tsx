@@ -72,8 +72,8 @@ export default function Signup() {
             Enter your email below to create a new account
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form>
+        <form className="flex flex-col gap-8">
+          <CardContent>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="name">Display Name</Label>
@@ -136,29 +136,29 @@ export default function Signup() {
                 )}
               </div>
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button
-            type="submit"
-            className="w-full"
-            onClick={handleSubmit(onSubmit)}
-            disabled={isCreatingAccount}
-          >
-            <MoonLoader
-              color={'#ffffff'}
-              loading={isCreatingAccount}
-              size={15}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
+          </CardContent>
+          <CardFooter className="flex-col gap-2">
+            <Button
+              type="submit"
+              className="w-full"
+              onClick={handleSubmit(onSubmit)}
+              disabled={isCreatingAccount}
+            >
+              <MoonLoader
+                color={'#ffffff'}
+                loading={isCreatingAccount}
+                size={15}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
 
-            {isCreatingAccount ? 'Please wait' : 'Sign up'}
-          </Button>
-          {/* <Button variant="outline" className="w-full">
+              {isCreatingAccount ? 'Please wait' : 'Sign up'}
+            </Button>
+            {/* <Button variant="outline" className="w-full">
             Sign up with Google
           </Button> */}
-        </CardFooter>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   );
