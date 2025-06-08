@@ -9,13 +9,46 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email({ message: 'Invalid email address' }),
+  password: z
+    .string()
+    .min(6, { message: 'Password must be at least 6 characters' }),
+});
+
+type SigninFormValues = z.infer<typeof schema>;
 
 export default function Signin() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SigninFormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = async (data: SigninFormValues) => {
+    console.log('Submitting form:', data);
+
+    // Replace this with your actual auth logic
+    await new Promise((res) => setTimeout(res, 1000));
+
+    alert('Signed in!');
+  };
+
   return (
     <div className="py-24">
       <Card className="w-full max-w-sm mx-auto">
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Sign in to your account</CardTitle>
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
@@ -25,34 +58,64 @@ export default function Signin() {
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      id="email"
+                      type="email"
+                      autoFocus
+                      required
+                      placeholder="you@example.com"
+                      {...field}
+                    />
+                  )}
                 />
+                {errors.email && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="text-xs ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
+                  <a className="text-xs ml-auto inline-block underline-offset-4 hover:underline">
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="••••••••"
+                      {...field}
+                    />
+                  )}
+                />
+                {errors.password && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
             </div>
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full">
-            Login
+          <Button
+            type="submit"
+            className="w-full"
+            onClick={handleSubmit(onSubmit)}
+          >
+            Sign in
           </Button>
           <Button variant="outline" className="w-full">
-            Login with Google
+            Sign in with Google
           </Button>
         </CardFooter>
       </Card>
