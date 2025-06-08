@@ -1,3 +1,4 @@
+import { signin } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -10,7 +11,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { MoonLoader } from 'react-spinners';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -23,6 +28,9 @@ const schema = z.object({
 type SigninFormValues = z.infer<typeof schema>;
 
 export default function Signin() {
+  const [isSigningIn, setIsSigningIn] = useState(false);
+
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -30,18 +38,25 @@ export default function Signin() {
   } = useForm<SigninFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'samieoseh@gmail.com',
+      password: '12345678',
     },
   });
 
   const onSubmit = async (data: SigninFormValues) => {
-    console.log('Submitting form:', data);
-
-    // Replace this with your actual auth logic
-    await new Promise((res) => setTimeout(res, 1000));
-
-    alert('Signed in!');
+    try {
+      setIsSigningIn(true);
+      await signin(data);
+      navigate('/dashboard');
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('An unknown error occurred.');
+      }
+    } finally {
+      setIsSigningIn(false);
+    }
   };
 
   return (
@@ -89,12 +104,7 @@ export default function Signin() {
                   name="password"
                   control={control}
                   render={({ field }) => (
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="••••••••"
-                      {...field}
-                    />
+                    <Input id="password" type="password" {...field} />
                   )}
                 />
                 {errors.password && (
@@ -112,11 +122,18 @@ export default function Signin() {
             className="w-full"
             onClick={handleSubmit(onSubmit)}
           >
-            Sign in
+            <MoonLoader
+              color={'#ffffff'}
+              loading={isSigningIn}
+              size={15}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+            {isSigningIn ? 'Please wait' : 'Sign in'}
           </Button>
-          <Button variant="outline" className="w-full">
+          {/* <Button variant="outline" className="w-full">
             Sign in with Google
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     </div>

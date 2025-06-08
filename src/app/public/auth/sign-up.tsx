@@ -12,8 +12,16 @@ import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { signup } from '@/api/auth';
+import { useState } from 'react';
+import { MoonLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const schema = z.object({
+  displayName: z
+    .string()
+    .min(4, { message: 'Display name must be at least 4 characters' }),
   email: z.string().email({ message: 'Invalid email address' }),
   password: z
     .string()
@@ -23,6 +31,9 @@ const schema = z.object({
 type SignupFormValues = z.infer<typeof schema>;
 
 export default function Signup() {
+  const navigate = useNavigate();
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -30,18 +41,26 @@ export default function Signup() {
   } = useForm<SignupFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: '',
-      password: '',
+      displayName: 'Samuel',
+      email: 'samieoseh@gmail.com',
+      password: '12345678',
     },
   });
 
   const onSubmit = async (data: SignupFormValues) => {
-    console.log('Submitting form:', data);
-
-    // Replace this with your actual auth logic
-    await new Promise((res) => setTimeout(res, 1000));
-
-    alert('Signed up!');
+    try {
+      setIsCreatingAccount(true);
+      await signup(data);
+      navigate('/dashboard');
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('An unknown error occurred.');
+      }
+    } finally {
+      setIsCreatingAccount(false);
+    }
   };
 
   return (
@@ -56,6 +75,27 @@ export default function Signup() {
         <CardContent>
           <form>
             <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Display Name</Label>
+                <Controller
+                  name="displayName"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      id="displayName"
+                      autoFocus
+                      required
+                      placeholder="example"
+                      {...field}
+                    />
+                  )}
+                />
+                {errors.displayName && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.displayName.message}
+                  </p>
+                )}
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Controller
@@ -86,12 +126,7 @@ export default function Signup() {
                   name="password"
                   control={control}
                   render={({ field }) => (
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="••••••••"
-                      {...field}
-                    />
+                    <Input id="password" type="password" {...field} />
                   )}
                 />
                 {errors.password && (
@@ -108,12 +143,21 @@ export default function Signup() {
             type="submit"
             className="w-full"
             onClick={handleSubmit(onSubmit)}
+            disabled={isCreatingAccount}
           >
-            Sign up
+            <MoonLoader
+              color={'#ffffff'}
+              loading={isCreatingAccount}
+              size={15}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+
+            {isCreatingAccount ? 'Please wait' : 'Sign up'}
           </Button>
-          <Button variant="outline" className="w-full">
+          {/* <Button variant="outline" className="w-full">
             Sign up with Google
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     </div>

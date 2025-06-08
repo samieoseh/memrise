@@ -5,6 +5,9 @@ import Signup from './app/public/auth/sign-up';
 import Signin from './app/public/auth/sign-in';
 import ForgotPassword from './app/public/auth/forgot-password';
 import ResetPassword from './app/public/auth/reset-password';
+import { Toaster } from 'react-hot-toast';
+import MainLayout from './app/(app)/_layout';
+import Dashboard from './app/(app)/dashboard';
 
 const router = createBrowserRouter([
   {
@@ -34,8 +37,32 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  {
+    path: '/dashboard',
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+    ],
+  },
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#1f2937',
+            color: '#fff',
+          },
+        }}
+      />
+    </>
+  );
 }
