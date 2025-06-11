@@ -74,6 +74,7 @@ export default function Index() {
 
   const { session, isLoadingSession } = useSession();
 
+  console.log({ session });
   if (isLoadingSession) {
     return (
       <div className="h-screen w-full border gap-4 flex flex-1 flex-col items-center justify-center">
