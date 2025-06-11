@@ -68,6 +68,8 @@ const testimonials = [
 ];
 
 export default function Index() {
+  console.log('landing');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const { session, isLoadingSession } = useSession();
@@ -86,11 +88,9 @@ export default function Index() {
     );
   }
 
-  if (session) {
-    navigate('/dashboard');
-  }
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // if (session) {
+  //   navigate('/dashboard');
+  // }
 
   return (
     <div className="min-h-screen bg-white">
